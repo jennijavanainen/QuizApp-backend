@@ -17,6 +17,7 @@ const schema = mongoose.Schema({
   name: String,
   id: Number,
   description: String,
+  showCorrectAnswers: Boolean,
   questions: [
     {
       question: String,
