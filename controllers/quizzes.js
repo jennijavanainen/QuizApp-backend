@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const Quiz = require('../models/quiz')
-const app = require('../app')
 
 router.get('/', async(req, res) => {
   const quizzes = await Quiz

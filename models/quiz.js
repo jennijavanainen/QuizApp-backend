@@ -13,11 +13,15 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
-const schema = mongoose.Schema({
+const quizSchema = mongoose.Schema({
   name: String,
   id: Number,
   description: String,
   showCorrectAnswers: Boolean,
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   questions: [
     {
       question: String,
@@ -35,7 +39,7 @@ const schema = mongoose.Schema({
   ]
 })
 
-schema.set('toJSON', {
+quizSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
     returnedObject.questions.map(q =>  {
@@ -48,8 +52,8 @@ schema.set('toJSON', {
     })
     delete returnedObject._id
     delete returnedObject.__v
-    //delete returnedObject.passwordHash
+    delete returnedObject.passwordHash
   }
 })
 
-module.exports = mongoose.model('Quiz', schema)
+module.exports = mongoose.model('Quiz', quizSchema)
