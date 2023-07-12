@@ -11,7 +11,6 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
   const { username, name, password } = request.body
-  console.log()
   if (!password || password.length < 8) {
     return response.status(400).json({
       error: 'password must be at least 8 characters'
