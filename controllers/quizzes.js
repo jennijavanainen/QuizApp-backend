@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Quiz = require('../models/quiz')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 router.get('/', async(req, res) => {
@@ -17,20 +18,23 @@ router.get('/api/quizzes/:id', async (req, res) => {
 })
 
 router.post('/', async (req,res) => {
-  const { name, description, showCorrectAnswers, creator, questions } = req.body
+  const { name, description, showCorrectAnswers, questions, creator } = req.body
+  const decodedToken = jwt.verify(creator.token, process.env.SECRET)
+  const user = await User.findById(decodedToken.id)
 
   const quiz = new Quiz({
     name,
     description,
     showCorrectAnswers,
-    creator,
+    creator: user._id,
     questions
   })
+
+  console.log(quiz)
 
   const savedQuiz = await quiz.save()
 
   res.status(201).json(savedQuiz)
-
 
 })
 
