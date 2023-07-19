@@ -22,6 +22,10 @@ router.post('/', async (req,res) => {
   const decodedToken = jwt.verify(creator.token, process.env.SECRET)
   const user = await User.findById(decodedToken.id)
 
+  if (!user) {
+    return res.status(401).json({ error: 'operation not permitted' })
+  }
+
   const quiz = new Quiz({
     name,
     description,
@@ -30,11 +34,19 @@ router.post('/', async (req,res) => {
     questions
   })
 
-  console.log(quiz)
 
   const savedQuiz = await quiz.save()
 
   res.status(201).json(savedQuiz)
+
+})
+
+router.delete('/:id',  async (req,res) => {
+  const quiz = await Quiz.findById(req.params.id)
+
+  await quiz.remove()
+
+  res.status(204).end()
 
 })
 
