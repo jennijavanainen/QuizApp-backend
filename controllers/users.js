@@ -11,16 +11,17 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
   const { username, name, password } = request.body
-  if (!password || password.length < 8) {
-    return response.status(400).json({
-      error: 'password must be at least 8 characters'
-    })
-  }
 
   const existingUser = await User.findOne({ username })
   if (existingUser) {
     return response.status(400).json({
       error: 'username must be unique'
+    })
+  }
+
+  if (!password || password.length < 8) {
+    return response.status(400).json({
+      error: 'password must be at least 8 characters'
     })
   }
 
